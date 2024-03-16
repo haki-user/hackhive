@@ -33,6 +33,52 @@ function createServer() {
     try {
       // Connect the client to the server	(optional starting in v4.7)
       await client.connect();
+      app.get("/all-jobs", async (req, res) => {
+        const jobs = await jobsCollections.find({}).toArray();
+        res.send(jobs);
+      });
+
+      app.get("/all-jobs/:id", async (req, res) => {
+        const id = req.params.id;
+        const job = await jobsCollections.find({
+          _id: new ObjectId(id),
+        });
+        res.send(job);
+      });
+
+      app.get("/myJobs/:email", async (req, resp) => {
+        console.log(req.param.email);
+        const jobs = await jobsCollections
+          .find({ postedBy: req.params.email })
+          .toArray();
+        rea.send(jobs);
+      });
+
+      app.delete("/job/:id", async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const result = await jobsCollections.deleteOne(filter);
+        res.send(result);
+      });
+
+      app.patch("/update-job/:id", async (req, res) => {
+        const id = req.params.id;
+        const jobData = req.body;
+        const filter = { _id: new ObjectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            ...jobData,
+          },
+        };
+        const result = await jobsCollections.uodateOne(
+          filter,
+          updateDoc,
+          options
+        );
+        res.send(result);
+      });
+
       // Send a ping to confirm a successful connection
       await client.db("admin").command({ ping: 1 });
       console.log(
@@ -47,4 +93,5 @@ function createServer() {
 
   return app;
 }
+
 module.exports = { createServer };
