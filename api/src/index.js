@@ -1,7 +1,7 @@
-const {CreateServer} = require("./server");
+const { createServer } = require("./server");
 
 
-const Server = CreateServer();
+const Server = createServer();
 
 Server.listen(process.env.PORT, () => {
   console.log("server running");
