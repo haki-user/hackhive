@@ -11,9 +11,6 @@ function createServer() {
   app.use(cors());
   app.use(express.json());
 
-  //Routes
-  //app.use("/api/v1/auth", authRoutes);
-
   return app;
 }
 module.exports = { createServer };
