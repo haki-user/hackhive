@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 //config env
 dotenv.configDotenv();
 
-function CreateServer() {
+function createServer() {
   const app = express();
 
   app.use(cors());
